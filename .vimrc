@@ -1,11 +1,36 @@
-set runtimepath+=~/.vim_runtime
+" status bar
+function! GitBranch()
+  return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
+endfunction
 
-source ~/.vim_runtime/vimrcs/basic.vim
-source ~/.vim_runtime/vimrcs/filetypes.vim
-source ~/.vim_runtime/vimrcs/plugins_config.vim
-source ~/.vim_runtime/vimrcs/extended.vim
+function! StatuslineGit()
+  let l:branchname = GitBranch()
+  return strlen(l:branchname) > 0?'  '.l:branchname.' ':''
+endfunction
 
-try
-source ~/.vim_runtime/my_configs.vim
-catch
-endtry
+set laststatus=2
+set statusline=
+set statusline+=%#PmenuSel#
+set statusline+=%{StatuslineGit()}
+set statusline+=%#LineNr#
+set statusline+=\ %f
+set statusline+=%m
+set statusline+=%=
+set statusline+=%#CursorColumn#
+set statusline+=\ %y
+set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
+set statusline+=\ %p%%
+set statusline+=\ %l:%c
+set statusline+=\ 
+
+" show line numbers
+set number
+
+" tabs
+set tabstop=4
+set expandtab
+
+" colorscheme
+colo murphy
+
+
